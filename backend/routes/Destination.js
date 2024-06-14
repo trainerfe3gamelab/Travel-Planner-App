@@ -4,7 +4,7 @@ const destinationController = require("../controllers/Users/destinationControlle
 const { isLoggedIn } = require("../middleware/authMiddleware");
 
 // Get all tour 
-router.get('/', destinationController.getAllTours);
+router.get('/', isLoggedIn, destinationController.getAllTours);
 
 // Get single tour 
 router.get('/:id', isLoggedIn, destinationController.getSingleTour);
