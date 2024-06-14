@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const toursController = require("../controllers/Users/destinationController");
+const destinationController = require("../controllers/Users/destinationController");
 const { isLoggedIn } = require("../middleware/authMiddleware");
 
 // Get all tour 
-router.get('/', isLoggedIn, toursController.getAllTours);
+router.get('/', destinationController.getAllTours);
 
 // Get single tour 
-router.get('/:id', isLoggedIn, toursController.getSingleTour);
+router.get('/:id', isLoggedIn, destinationController.getSingleTour);
 
 // Get tour by search
-router.get("/search/getTourBySearch", isLoggedIn, toursController.getTourBySearch);
-router.get("/search/getTourCount", isLoggedIn, toursController.getTourCount);
+router.get("/search/getTourBySearch", isLoggedIn, destinationController.getTourBySearch);
+router.get("/search/getTourCount", isLoggedIn, destinationController.getTourCount);
 
 module.exports = router;
