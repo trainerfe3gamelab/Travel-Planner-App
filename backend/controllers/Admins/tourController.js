@@ -96,22 +96,6 @@ module.exports = {
     }
   },
 
-  getFeaturedTour: async (req, res) => {
-    try {
-      const tours = await Tour.find({ featured: true })
-        
-        .limit(10);
-
-      res.status(200).json({
-        success: true,
-        message: "Successfully Load Tours Data",
-        data: tours,
-      });
-    } catch (error) {
-      res.status(404).json({ success: false, message: "Not Found" });
-    }
-  },
-
   getTourCount: async (req, res) => {
     try {
       const tourCount = await Tour.estimatedDocumentCount();

@@ -14,6 +14,7 @@ const userDataRoutes = require("./routes/User.js");
 const usersRoutes = require("./routes/Users.js");
 const toursRoutes = require("./routes/Tour.js");
 const reviewsRoutes = require("./routes/Review.js");
+const destinationsRoutes = require("./routes/Destination.js");
 
 dotenv.config();
 const app = express();
@@ -47,7 +48,7 @@ const connect = async () => {
 
     console.log("MongoDB connected");
   } catch (error) {
-    console.log("MongoDB connected failed");
+    console.log("MongoDB connected failed", error);
   }
 };
 
@@ -62,6 +63,7 @@ app.use("/user", userDataRoutes);
 app.use("/users", usersRoutes);
 app.use("/tours", toursRoutes);
 app.use("/reviews", reviewsRoutes);
+app.use("/destination", destinationsRoutes);
 
 app.use("/images", express.static("images"));
 
