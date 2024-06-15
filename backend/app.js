@@ -15,6 +15,7 @@ const usersRoutes = require("./routes/Users.js");
 const toursRoutes = require("./routes/Tour.js");
 const reviewsRoutes = require("./routes/Review.js");
 const destinationsRoutes = require("./routes/Destination.js");
+const bookingsRoutes = require("./routes/Booking.js");
 
 dotenv.config();
 const app = express();
@@ -64,6 +65,7 @@ app.use("/users", usersRoutes);
 app.use("/tours", toursRoutes);
 app.use("/reviews", reviewsRoutes);
 app.use("/destination", destinationsRoutes);
+app.use("/booking", bookingsRoutes);
 
 app.use("/images", express.static("images"));
 
