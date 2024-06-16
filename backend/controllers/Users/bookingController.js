@@ -27,7 +27,7 @@ const createBooking = async (req, res) => {
     const savedBooking = await newBooking.save();
     return res.status(200).json({
       success: true,
-      message: "Review submitted",
+      message: "Booking submitted",
       data: savedBooking,
     });
   } catch (error) {
