@@ -57,15 +57,15 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use("/login", authRoute);
-app.use("/register", registerRoute);
-app.use("/logout", logoutRoute);
-app.use("/user", userDataRoutes);
-app.use("/users", usersRoutes);
-app.use("/tours", toursRoutes);
-app.use("/reviews", reviewsRoutes);
-app.use("/destination", destinationsRoutes);
-app.use("/booking", bookingsRoutes);
+app.use("/api/login", authRoute);
+app.use("/api/register", registerRoute);
+app.use("/api/logout", logoutRoute);
+app.use("/api/user", userDataRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/tours", toursRoutes);
+app.use("/api/reviews", reviewsRoutes);
+app.use("/api/destination", destinationsRoutes);
+app.use("/api/booking", bookingsRoutes);
 
 app.use("/images", express.static("images"));
 
