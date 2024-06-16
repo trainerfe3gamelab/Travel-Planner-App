@@ -4,8 +4,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const path = require("path");
-const fs = require("fs");
 
 const authRoute = require("./routes/Auth.js");
 const registerRoute = require("./routes/Register.js");
