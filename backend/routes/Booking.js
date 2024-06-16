@@ -3,6 +3,8 @@ const router = express.Router();
 const bookingController = require("../controllers/Users/bookingController");
 const { isLoggedIn } = require("../middleware/authMiddleware");
 
-router.post("/:id", isLoggedIn, bookingController.createBooking)
+router.post("/tour/:id", isLoggedIn, bookingController.createBooking);
+router.get("/", isLoggedIn, bookingController.getAllBooking);
+router.get("/:id", isLoggedIn, bookingController.getSingleBooking);
 
 module.exports = router;

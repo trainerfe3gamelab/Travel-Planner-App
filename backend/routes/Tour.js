@@ -5,7 +5,7 @@ const { uploadAdmin } = require("../middleware/uploadMiddleware");
 const { isAdmin } = require("../middleware/roleMiddleware");
 
 // Create new tour 
-router.post("/", uploadAdmin.single("image"), tourController.createTour);
+router.post("/", uploadAdmin.single("image"), isAdmin, tourController.createTour);
 
 // Get all tour 
 router.get('/', isAdmin, tourController.getAllTours);
