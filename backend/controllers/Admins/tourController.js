@@ -128,32 +128,42 @@ module.exports = {
       }
 
       const oldPhoto = tour.photo;
+      const oldTitle = tour.title;
 
-      // Update tour details
-      tour.set(req.body);
-
-      // Check if a new file is uploaded
-      if (req.file) {
-        tour.photo = req.file.path;
-      }
-
-      // Check if a new name is already in use
+      // Check if a new title is already in use
       if (req.body.title && req.body.title !== oldTitle) {
         const existingTour = await Tour.findOne({ title: req.body.title });
         if (existingTour) {
+          // Remove the newly uploaded file since it won't be used
+          if (req.file) {
+            fs.unlink(req.file.path, (err) => {
+              if (err) {
+                console.error("Failed to delete new photo after title validation:", err);
+              }
+            });
+          }
+
           return res.status(400).json({
             success: false,
-            message:
-              "Tour name already exists. Please choose a different name.",
+            message: "Tour name already exists. Please choose a different name.",
           });
         }
       }
 
+      // Update tour data
+      Object.assign(tour, req.body);
+
+      // Set the new photo path
+      if (req.file) {
+        tour.photo = req.file.path;
+      }
+
+      // Save the updated tour
       await tour.save();
 
-      // Delete old photo if a new one is uploaded
+      // Delete the old photo if a new one was uploaded and saved tour data
       if (req.file && oldPhoto) {
-        fs.unlink(oldPhoto, (err) => {
+        fs.unlink(path(oldPhoto), (err) => {
           if (err) {
             console.error("Failed to delete old photo:", err);
           }
@@ -166,7 +176,19 @@ module.exports = {
         data: tour,
       });
     } catch (error) {
-      res.status(500).json({ success: false, message: "Failed to update" });
+      // If an error occurs, delete the new photo if was uploaded
+      if (req.file) {
+        fs.unlink(req.file.path, (err) => {
+          if (err) {
+            console.error("Failed to delete new photo after error:", err);
+          }
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        message: "Failed to update",
+      });
     }
   },
 
