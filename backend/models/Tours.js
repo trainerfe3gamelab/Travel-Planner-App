@@ -45,7 +45,6 @@ const tourSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 const Tours = mongoose.model("tbl_tours", tourSchema);
 
 module.exports = Tours;

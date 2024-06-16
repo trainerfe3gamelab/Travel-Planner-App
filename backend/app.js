@@ -67,7 +67,7 @@ app.use("/api/reviews", reviewsRoutes);
 app.use("/api/destination", destinationsRoutes);
 app.use("/api/booking", bookingsRoutes);
 
-app.use("/images", express.static("images"));
+app.use("/images", express.static("photo"));
 
 app.listen(port, () => {
   connect();

@@ -5,12 +5,12 @@ const fs = require("fs");
 module.exports = {
   createTour: async (req, res) => {
     const newTour = new Tour(req.body);
-  
+
     // Check if a file is uploaded
     if (req.file) {
       newTour.photo = req.file.path;
     }
-  
+
     try {
       let savedTour;
       let count = 1;
@@ -18,16 +18,18 @@ module.exports = {
 
       // Loop until finding a unique title
       while (true) {
-          let uniqueTitle = count === 1 ? originalTitle : `${originalTitle} ${count}`;
-          const tourExists = await Tour.findOne({ title: uniqueTitle });
-          if (!tourExists) {
-              newTour.title = uniqueTitle;
-              savedTour = await newTour.save();
-              break;
-          }
-          count++;
+        let uniqueTitle =
+          count === 1 ? originalTitle : `${originalTitle} ${count}`;
+        const tourExists = await Tour.findOne({ title: uniqueTitle });
+        if (!tourExists) {
+          newTour.title = uniqueTitle;
+          savedTour = await newTour.save();
+          break;
+        }
+        count++;
       }
-  
+      savedTour = await newTour.save();
+
       res.status(200).json({
         success: true,
         message: "Successfully added Tour",
@@ -45,7 +47,10 @@ module.exports = {
     const page = parseInt(req.query.page);
 
     try {
-      const tours = await Tour.find({}).populate('reviews').skip(page * 10).limit(10);
+      const tours = await Tour.find({})
+        .populate("reviews")
+        .skip(page * 10)
+        .limit(10);
 
       res.status(200).json({
         success: true,
@@ -54,7 +59,9 @@ module.exports = {
         data: tours,
       });
     } catch (error) {
-      res.status(404).json({ success: false, message: "Not Found",error: error.message });
+      res
+        .status(404)
+        .json({ success: false, message: "Not Found", error: error.message });
     }
   },
 
@@ -62,7 +69,7 @@ module.exports = {
     const id = req.params.id;
 
     try {
-      const tour = await Tour.findById(id).populate('reviews');
+      const tour = await Tour.findById(id).populate("reviews");
 
       res.status(200).json({
         success: true,
@@ -134,12 +141,13 @@ module.exports = {
       if (req.body.title && req.body.title !== oldTitle) {
         const existingTour = await Tour.findOne({ title: req.body.title });
         if (existingTour) {
-            return res.status(400).json({
-                success: false,
-                message: "Tour name already exists. Please choose a different name.",
-            });
+          return res.status(400).json({
+            success: false,
+            message:
+              "Tour name already exists. Please choose a different name.",
+          });
         }
-    }
+      }
 
       await tour.save();
 
@@ -208,15 +216,21 @@ module.exports = {
       const review = await Reviews.findById(reviewId);
 
       if (!review) {
-        return res.status(404).json({ success: false, message: "Review not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Review not found" });
       }
 
       // Delete Review
       await Reviews.findByIdAndDelete(reviewId);
 
-      res.status(200).json({ success: true, message: "Successfully deleted review" });
+      res
+        .status(200)
+        .json({ success: true, message: "Successfully deleted review" });
     } catch (error) {
-      res.status(500).json({ success: false, message: "Failed to delete review" });
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to delete review" });
     }
   },
 };
