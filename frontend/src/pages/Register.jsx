@@ -25,7 +25,7 @@ const Register = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("api/register", credentials);
+      const response = await axios.post("register", credentials);
       console.log("Registration successful:", response.data);
       navigate("/"); // Arahkan ke halaman home setelah berhasil mendaftar
     } catch (error) {

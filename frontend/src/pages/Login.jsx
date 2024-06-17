@@ -24,7 +24,7 @@ const Login = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get("api/login", credentials);
+      const response = await axios.post("login", credentials);
       console.log("login successful:", response.data);
       navigate("/"); // Arahkan ke halaman home setelah berhasil login
     } catch (error) {
