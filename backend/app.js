@@ -67,7 +67,7 @@ app.use("/api/tours", toursRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/destination", destinationsRoutes);
 app.use("/api/booking", bookingsRoutes);
-app.use("/api/reservation", reservationRoutes);
+app.use("/api/reservations", reservationRoutes);
 
 app.use("/images", express.static("photo"));
 

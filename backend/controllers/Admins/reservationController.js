@@ -7,41 +7,47 @@ const reservations = async (req, res) => {
     const results = await Bookings.aggregate([
       {
         $lookup: {
-          from: Users,
+          from: "tbl_users",
           localField: "userId",
           foreignField: "_id",
-          as: "userData",
+          as: "user",
         },
       },
       {
-        $unwind: "$userData",
+        $unwind: "$user",
       },
       {
         $lookup: {
-          from: Tours,
+          from: "tbl_tours",
           localField: "tourId",
           foreignField: "_id",
-          as: "tourData",
+          as: "tour",
         },
       },
       {
-        $unwind: "$tourData",
+        $unwind: "$tour",
       },
       {
         $project: {
           _id: 1,
-          bookingDate: 1,
-          userId: 1,
-          user: "$userData",
-          tourId: 1,
-          tour: "$tourData",
+          dataUser: {
+            _id: "$user._id",
+            username: "$user.username",
+            email: "$user.email",
+          },
+          dataTour: { _id: "$tour._id", tourTitle: "$tour.title" },
+          guestSize: 1,
+          bookAt: 1,
+          extraNotes: 1,
         },
       },
     ]);
 
-    res.status(200).json(results);
+    return res.status(200).json({ success: true, data: results });
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 
