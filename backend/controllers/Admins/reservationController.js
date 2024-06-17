@@ -1,21 +1,47 @@
-const Booking = require("../../models/Bookings");
+const Bookings = require("../../models/Bookings");
+const Users = require("../../models/Users");
+const Tours = require("../../models/Tours");
 
 const reservations = async (req, res) => {
   try {
-    const bookings = await Booking.find({});
+    const results = await Bookings.aggregate([
+      {
+        $lookup: {
+          from: Users,
+          localField: "userId",
+          foreignField: "_id",
+          as: "userData",
+        },
+      },
+      {
+        $unwind: "$userData",
+      },
+      {
+        $lookup: {
+          from: Tours,
+          localField: "tourId",
+          foreignField: "_id",
+          as: "tourData",
+        },
+      },
+      {
+        $unwind: "$tourData",
+      },
+      {
+        $project: {
+          _id: 1,
+          bookingDate: 1,
+          userId: 1,
+          user: "$userData",
+          tourId: 1,
+          tour: "$tourData",
+        },
+      },
+    ]);
 
-    if (!bookings) {
-      return res
-        .status(404)
-        .json({ success: false, message: "No bookings found" });
-    }
-
-    return res.status(200).json({ success: true, data: bookings });
+    res.status(200).json(results);
   } catch (error) {
-    console.error("Error fetching bookings:", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    res.status(500).json({ message: "Server Error", error });
   }
 };
 
