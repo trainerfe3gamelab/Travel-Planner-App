@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { Container, Row, Col, Form, FormGroup, Button } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,17 +6,19 @@ import "../styles/login.css";
 
 import registerImg from "../assets/images/register.png";
 import userIcon from "../assets/images/user.png";
-import axios from "../services/api";
+
+import { AuthContext } from "../context/AuthContext";
+import BASE_URL from "../utils/config";
 
 const Register = () => {
   const [credentials, setCredentials] = useState({
-    userName: "",
+    username: "",
     email: "",
     password: "",
   });
 
-  const [error, setError] = useState(null); // State untuk menyimpan pesan kesalahan
-  const navigate = useNavigate(); // Hook untuk navigasi
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -24,13 +26,26 @@ const Register = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    dispatch({ type: "LOGIN START" });
     try {
-      const response = await axios.post("register", credentials);
-      console.log("Registration successful:", response.data);
-      navigate("/"); // Arahkan ke halaman home setelah berhasil mendaftar
-    } catch (error) {
-      console.error("There was an error registering:", error);
-      setError("Failed to register. Please try again."); // Set pesan kesalahan
+      const res = await fetch(`${BASE_URL}/register `, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(credentials),
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        return alert(result.message);
+      }
+
+      dispatch({ type: "REGISTER_SUCCESS" });
+      navigate("/login");
+    } catch (err) {
+      alert(err.message);
     }
   };
 
