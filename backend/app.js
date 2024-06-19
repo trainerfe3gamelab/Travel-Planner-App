@@ -58,6 +58,11 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+    debugger;
+    res.send("Hello World dulu ");
+});
+
 app.use("/api/login", authRoute);
 app.use("/api/register", registerRoute);
 app.use("/api/logout", logoutRoute);
