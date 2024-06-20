@@ -29,6 +29,12 @@ module.exports = {
 
       const savedReview = await newReview.save();
 
+      await Tour.findByIdAndUpdate(
+        tourId,
+        { $push: { reviews: savedReview._id } },
+        { new: true, useFindAndModify: false }
+      );
+
       return res.status(200).json({
         success: true,
         message: "Review submitted",

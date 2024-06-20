@@ -27,6 +27,6 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Reviews = mongoose.model("Reviews", reviewSchema, 'tbl_reviews');
+const Reviews = mongoose.model("tbl_reviews", reviewSchema);
 
 module.exports = Reviews;
