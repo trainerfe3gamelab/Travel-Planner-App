@@ -10,28 +10,38 @@ module.exports = {
     const user = await User.findById(decoded.id);
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "No users found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "No users found" });
     }
 
     try {
-      const tourId = req.params.id;
+      const tourId = req.params.tourId;
       const userId = decoded.id;
-      const { reviewText, Rating } = req.body;
-  
+      const { reviewText, rating } = req.body;
+
       const newReview = new Reviews({
         tourId,
         userId,
         reviewText,
-        Rating,
+        rating,
       });
-  
+
       const savedReview = await newReview.save();
+
+      await Tour.findByIdAndUpdate(
+        tourId,
+        { $push: { reviews: savedReview._id } },
+        { new: true, useFindAndModify: false }
+      );
+
       return res.status(200).json({
         success: true,
         message: "Review submitted",
         data: savedReview,
       });
     } catch (error) {
+      console.log(error.message);
       res.status(500).json({ success: false, message: "Failed to submit" });
     }
   },

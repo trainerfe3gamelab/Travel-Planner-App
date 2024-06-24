@@ -59,8 +59,8 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-    debugger;
-    res.send("Hello World dulu ");
+  debugger;
+  res.send("Hello World dulu ");
 });
 
 app.use("/api/login", authRoute);
