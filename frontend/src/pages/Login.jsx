@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 
 import { Container, Row, Col, Form, FormGroup, Button } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,18 +7,15 @@ import "../styles/login.css";
 
 import loginImg from "../assets/images/login.png";
 import userIcon from "../assets/images/user.png";
-
-import { AuthContext } from "../context/AuthContext";
-import BASE_URL from "../utils/config";
+import axios from "../services/api";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
-
-  const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [error, setError] = useState(null); // State untuk menyimpan pesan kesalahan
+  const navigate = useNavigate(); // Hook untuk navigasi
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -26,27 +23,13 @@ const Login = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    dispatch({ type: "LOGIN START" });
     try {
-      const res = await fetch(`${BASE_URL}/login `, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(credentials),
-      });
-
-      const result = await res.json();
-      if (!res.ok) {
-        return alert(result.message);
-      }
-
-      dispatch({ type: "LOGIN_SUCCESS", payload: result.data });
-      console.log(result.data);
-      navigate("/");
-    } catch (err) {
-      dispatch({ type: "LOGIN_FAILURE", payload: err.message });
+      const response = await axios.post("login", credentials);
+      console.log("login successful:", response.data);
+      navigate("/"); // Arahkan ke halaman home setelah berhasil login
+    } catch (error) {
+      console.error("There was an error login:", error);
+      setError("Failed to login. Please try again."); // Set pesan kesalahan
     }
   };
 

@@ -1,3 +1,3 @@
-const BASE_URL = "https://api-msib-6-travel-planner-01.educalab.id/api";
+const BASE_URL = "http://localhost:8597/api";
 
 export default BASE_URL;
